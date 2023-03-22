@@ -5,6 +5,7 @@ from handlers.basic_handlers import (
     help_command, info_command, picture_command, hello
 )
 from handlers.shop import send_kb
+from handlers.admin import check_curses, ban_user
 
 
 if __name__ == "__main__":
@@ -14,4 +15,7 @@ if __name__ == "__main__":
     dp.register_message_handler(info_command, commands=["info"])
     dp.register_message_handler(picture_command, commands=["picture"])
     dp.register_message_handler(hello)
+    dp.register_message_handler(ban_user, commands=["да"], commands_prefix=['/'])
+    dp.register_message_handler(check_curses)
+
     executor.start_polling(dp)
