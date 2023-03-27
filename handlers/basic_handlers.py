@@ -9,10 +9,11 @@ HELP_COMMAND = """
 """
 
 
-# @dp.message_handler(commands=["start"])
-# async def start_command(message: types.Message):
-#     await message.answer(f"Привет {message.from_user.first_name}")
-#     await message.delete()
+async def start(message: types.Message):
+    """Функция, которая обрабатывает команду /start"""
+    # await message.answer("Привет")
+    await message.reply("Я - бот Python273.")
+    await message.delete()
 
 
 # @dp.message_handler(commands=["help"])
@@ -21,10 +22,10 @@ async def help_command(message: types.Message):
 
 
 # @dp.message_handler(commands=["myinfo"])
-async def info_command(message: types.Message):
-    await message.reply(f'Вас зовут {message.from_user.first_name}\n'
-                        f'Ваш id {message.from_user.id}\n'
-                        f'Ваш username {message.from_user.username}')
+async def info(message: types.Message):
+    """Ф-я которая обрабатывает команду info
+    и отправляет юзеру его никнеймом"""
+    await message.reply(f"Ты - {message.from_user.username}")
 
 
 # @dp.message_handler(commands=["picture"])

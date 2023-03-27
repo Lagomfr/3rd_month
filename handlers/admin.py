@@ -1,28 +1,32 @@
 from aiogram import types
-from aiogram.dispatcher.filters import BoundFilter
 
 
-class IsAdminFilter(BoundFilter):
-    key = 'is_admin'
-
-    def __init__(self, is_admin):
-        self.is_admin = is_admin
-
-    async def check(self, message: types.Message):
-        member = await message.bot.get_chat_member(message.chat.id, message.from_user.id)
-        return member.is_chat_admin()
-
+async def example(message: types.Message):
+    # print(message.chat.type)
+    if message.chat.type != 'private':
+        print(message.text)
+        admins = await message.chat.get_administrators()
+        for a in admins:
+            print(a["user"]["username"])
+        await message.answer("Привет")
 
 
 async def check_curses(message: types.Message):
-    bad_words = ["дурак", "собака", "идиот"]
+    bad_words = ["дурак", "собака"]
     if message.chat.type != 'private':
         for word in bad_words:
             if word in message.text.lower().replace(' ', ''):
                 print(message.text.lower().replace(' ', ''))
-                await message.reply(f"Админы, кикнуть пользователя {message.from_user.username} за испльзование плохих слов /да или нет?[{message.from_user.id}]")
+                # await message.reply("Не ругайся")
+                await message.reply(f"Админы, забанить этого пользователя за мат?[{message.from_user.id}]")
                 break
 
+
+async def pin_message(message: types.Message):
+    if message.chat.type != 'private':
+        print(message.text)
+        if message.reply_to_message:
+            await message.reply_to_message.pin()
 
 
 async def is_admin(message: types.Message) -> bool:
@@ -36,15 +40,12 @@ async def is_admin(message: types.Message) -> bool:
     return False
 
 
-
 async def ban_user(message: types.Message):
     author_admin = await is_admin(message)
     if message.chat.type != 'private':
         if message.reply_to_message and author_admin:
-            user_id = int(message.reply_to_message.text.split('[')[-1].replace(']', ''))
-            await message.bot.ban_chat_member(
-                chat_id=message.chat.id,
-                user_id=user_id
-            )
-            print(user_id)
-            await message.answer(f"Забанил пользователя {user_id}")
+            # await message.bot.ban_chat_member(
+            #     chat_id= message.chat.id,
+            #     user_id= message.reply_to_message.from_user.id
+            # )
+            await message.answer("Забанил юзера {message.reply_to_message.from_user.username}")
